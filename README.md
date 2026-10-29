@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/icon.png" width="128" alt="SpartanLauncher icon"></p>
+
 # Spartan Launcher
 
 A **Windows 10 Mobile / Windows Phone 8.1 recreation for Android**: a home screen launcher with Metro live tiles, the W10M Start experience and its look and feel.
