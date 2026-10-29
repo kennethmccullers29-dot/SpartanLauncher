@@ -40,6 +40,9 @@ internal fun permissionSetupText(tag: String): List<String> = when (tag) {
     "pt" -> listOf("Permissões", "Ative os blocos dinâmicos. Tudo é opcional e pode ser alterado nas configurações.",
         "Localização", "Clima da sua cidade", "Contatos", "Fotos no bloco Pessoas", "Fotos", "Suas imagens na tela inicial",
         "Calendário", "Seu próximo compromisso", "Notificações", "Contadores, mensagens e música", "permitir", "permitido", "configurações")
+    "zh" -> listOf("权限", "让动态磁贴动起来。这些都是可选的，你可以稍后在设置中更改。",
+        "位置", "你所在城市的天气", "联系人", "人脉磁贴上的联系人照片", "照片", "开始屏幕上的图片",
+        "日历", "你的下一个约会", "通知", "磁贴计数、消息预览和音乐", "允许", "已允许", "打开设置")
     else -> listOf("Permissions", "Bring your live tiles to life. These are optional; you can change them later in Settings.",
         "Location", "Weather for your current city", "Contacts", "Contact photos on the People tile", "Photos", "Your pictures on Start",
         "Calendar", "Your next appointment", "Notifications", "Tile counts, message previews and music", "allow", "allowed", "open settings")

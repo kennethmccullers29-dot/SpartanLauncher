@@ -21,7 +21,7 @@ A **Windows 10 Mobile / Windows Phone 8.1 recreation for Android**: a home scree
 
 ## Language
 
-Spartan Launcher can use a different language than your phone: **Settings → System → Language** (System default, English, 简体中文). The choice applies immediately and is kept across restarts.
+Spartan Launcher can use a different language than your phone: **Settings → System → Language** (System default, English, 简体中文 — also offered on the first-start language screen). The choice applies immediately and is kept across restarts.
 
 Every Settings page has a W10M-style bottom bar — tap the Windows key to leave Settings and go straight to Start.
 

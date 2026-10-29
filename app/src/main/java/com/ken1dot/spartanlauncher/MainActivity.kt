@@ -876,6 +876,7 @@ class MainActivity : ComponentActivity() {
             saveTileConfiguration(pinnedAppIds, pinnedOrder, tileSizes)
         }
         setupLanguage = language
+        AppLanguage.save(this, setupAppLanguage(language))
         getSharedPreferences("launcher", MODE_PRIVATE).edit()
             .putString(SETUP_LANGUAGE_KEY, language)
             .putBoolean(SETUP_COMPLETE_KEY, true).apply()

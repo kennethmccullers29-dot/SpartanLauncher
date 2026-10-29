@@ -48,8 +48,18 @@ internal val setupLanguages = listOf(
         "los geht’s", "zurück"),
     SetupLanguage("pt", "Português (Brasil)", "Bem-vindo", "Vamos começar. Escolha seu idioma.",
         "próximo", "Tudo pronto", "Sua tela inicial está pronta. Personalize o tamanho e a posição dos seus blocos.",
-        "começar", "voltar")
+        "começar", "voltar"),
+    SetupLanguage("zh-CN", "简体中文", "欢迎", "我们开始吧。请选择你的语言。",
+        "下一步", "一切就绪", "你的开始屏幕已准备好。调整磁贴的大小和位置，让它更具个性。",
+        "开始", "返回")
 )
+
+/** Maps a setup choice to the in-app language (same preference as Settings → System → Language). */
+internal fun setupAppLanguage(tag: String): String = when (tag.substringBefore("-")) {
+    "zh" -> "zh-CN"
+    "en" -> "en"
+    else -> "" // no app translation yet: follow the system language
+}
 
 internal val setupLanguageOptions = buildList {
     val german = setupLanguages.first { it.tag == "de" }
@@ -70,7 +80,7 @@ internal fun LauncherSetup(initialLanguage: String, loading: Boolean, onFinish: 
     var languageTag by rememberSaveable { mutableStateOf(initialLanguage) }
     var page by rememberSaveable { mutableIntStateOf(0) }
     val language = setupLanguageOptions.firstOrNull { it.tag == languageTag }
-        ?: setupLanguages.firstOrNull { it.tag == languageTag.substringBefore("-") } ?: setupLanguages.first()
+        ?: setupLanguages.firstOrNull { it.tag.substringBefore("-") == languageTag.substringBefore("-") } ?: setupLanguages.first()
     BackHandler { if (page > 0) page-- }
     Column(Modifier.fillMaxSize().background(Color.Black).safeDrawingPadding()) {
         AnimatedContent(page, modifier = Modifier.weight(1f), transitionSpec = {
@@ -92,7 +102,10 @@ internal fun LauncherSetup(initialLanguage: String, loading: Boolean, onFinish: 
                 if (step == 0) setupLanguageOptions.forEach { option ->
                     val selected = option.tag == language.tag
                     Row(Modifier.fillMaxWidth()
-                        .selectable(selected, role = Role.RadioButton, onClick = { languageTag = option.tag })
+                        .selectable(selected, role = Role.RadioButton, onClick = {
+                            languageTag = option.tag
+                            (context as? android.app.Activity)?.let { AppLanguage.apply(it, setupAppLanguage(option.tag)) }
+                        })
                         .padding(vertical = 14.dp),
                         horizontalArrangement = Arrangement.SpaceBetween) {
                         Text(option.name, color = if (selected) Color(0xFF5570F0) else Color.White,
@@ -104,7 +117,7 @@ internal fun LauncherSetup(initialLanguage: String, loading: Boolean, onFinish: 
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(2.dp)) {
             if (page > 0) SetupButton(language.back, Modifier.weight(1f)) { page-- }
             else SetupButton(when (language.tag.substringBefore("-")) {
-                "es" -> "Teléfono"; "fr" -> "Téléphone"; "de" -> "Telefon"; "pt" -> "Telefone"
+                "es" -> "Teléfono"; "fr" -> "Téléphone"; "de" -> "Telefon"; "pt" -> "Telefone"; "zh" -> "电话"
                 else -> "Phone"
             }, Modifier.weight(1f)) {
                 try { context.startActivity(android.content.Intent(android.content.Intent.ACTION_DIAL)) }
