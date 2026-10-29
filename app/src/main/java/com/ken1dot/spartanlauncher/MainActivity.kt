@@ -89,7 +89,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.graphics.layer.drawLayer
@@ -596,6 +595,10 @@ class MainActivity : ComponentActivity() {
     private lateinit var contactsPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var photosPermissionLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var wallpaperPicker: ActivityResultLauncher<PickVisualMediaRequest>
+
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(AppLanguage.wrap(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -1607,6 +1610,11 @@ private fun LauncherScreen(
     BackHandler(enabled = pagerState.currentPage == 1) {
         scope.launch { pagerState.animateScrollToPage(0) }
         searchQuery = ""
+    }
+    SettingsHome.handler = {
+        scope.launch { pagerState.scrollToPage(0) }
+        searchQuery = ""
+        closeLauncherSettings()
     }
     BackHandler(enabled = showLauncherSettings) {
         // A settings sub-page goes back to the settings list first (W10M back stack).
@@ -3214,11 +3222,31 @@ private fun LauncherSettingsScreen(
                     if (notificationAccessEnabled) "Live tile notifications are on" else "Enable notification counts and previews for pinned apps",
                     accentColor, onOpenNotificationSettings)
                 SettingsAction("Spartan Bar", "Status bar look and items", accentColor) { open("System/Spartan Bar") }
+                SettingsAction("Language", AppLanguage.options.firstOrNull { it.first == AppLanguage.current(context) }?.second ?: "Use system language", accentColor) { open("System/Language") }
                 SettingsAction("Battery", "Battery use and power saving", accentColor) {
                     openAndroidSettings(Settings.ACTION_BATTERY_SAVER_SETTINGS)
                 }
             }
             "System/Spartan Bar" -> SpartanBarSettings(accentColor)
+            "System/Language" -> {
+                Text("Choose the language Spartan Launcher uses. This doesn't change your phone's language.",
+                    color = SettingsSecondary, fontFamily = MetroRegular, fontSize = 14.sp)
+                val currentTag = remember { AppLanguage.current(context) }
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    AppLanguage.options.forEach { (tag, label) ->
+                        Row(Modifier.fillMaxWidth().metroTilt {
+                            (context as? android.app.Activity)?.let { AppLanguage.apply(it, tag) }
+                        }.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                            MetroRadio(
+                                selected = currentTag == tag, onClick = null,
+                                colors = androidx.compose.material3.RadioButtonDefaults.colors(
+                                    selectedColor = accentColor, unselectedColor = Color.Gray))
+                            Spacer(Modifier.width(8.dp))
+                            Text(label, color = Color.White, fontFamily = MetroRegular, fontSize = 18.sp)
+                        }
+                    }
+                }
+            }
             "Personalization" -> {
                 SettingsAction("Start", "Background, People tile", accentColor) { open("Personalization/Start") }
                 SettingsAction("Colors", accentOptions.firstOrNull { it.second == accentColor }?.first ?: "Custom color", accentColor) { open("Personalization/Colors") }

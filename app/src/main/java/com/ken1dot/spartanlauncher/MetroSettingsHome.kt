@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Alignment
@@ -124,6 +123,7 @@ internal fun MetroSettingsHome(
                 }
             }
         }
+        SettingsHomeBar()
     }
 }
 
@@ -166,7 +166,7 @@ internal fun MetroSettingsPage(
             SettingsGlyph(MetroSettingsCategory.entries.firstOrNull { it.title == iconCategory },
                 Modifier.size(18.dp), accentColor)
             Spacer(Modifier.width(10.dp))
-            Text(parentTitle.uppercase(), color = Color.White, fontFamily = MetroRegular,
+            Text(L(parentTitle).uppercase(), color = Color.White, fontFamily = MetroRegular,
                 fontWeight = FontWeight.SemiBold, fontSize = 13.sp, letterSpacing = 0.5.sp)
         }
         Text(category, Modifier.padding(start = 14.dp, end = 14.dp, top = 2.dp, bottom = 10.dp),
@@ -178,6 +178,7 @@ internal fun MetroSettingsPage(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             content = content
         )
+        SettingsHomeBar()
     }
 }
 
@@ -202,4 +203,22 @@ private fun MetroSettingsPagePreview() {
 @Composable
 private fun MetroSettingsHomePreview() {
     MetroSettingsHome("", {}, {}, Color(0xFF0078D7))
+}
+
+
+/** W10M-style bottom bar: the Windows key leaves Settings and shows Start. */
+@Composable
+internal fun SettingsHomeBar() {
+    Box(Modifier.fillMaxWidth().height(48.dp).background(Color(0xFF1F1F1F)), contentAlignment = Alignment.Center) {
+        Box(Modifier.size(width = 72.dp, height = 48.dp)
+            .semantics { contentDescription = "Start" }
+            .clickable { SettingsHome.handler?.invoke() }, contentAlignment = Alignment.Center) {
+            Canvas(Modifier.size(18.dp)) {
+                val gap = size.width * 0.08f
+                val cell = (size.width - gap) / 2
+                for (row in 0..1) for (col in 0..1) drawRect(Color.White,
+                    Offset(col * (cell + gap), row * (cell + gap)), Size(cell, cell))
+            }
+        }
+    }
 }

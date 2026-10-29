@@ -18,6 +18,13 @@ A **Windows 10 Mobile / Windows Phone 8.1 recreation for Android**: a home scree
 - Works together with [SpartanBar](https://github.com/kennethmccullers29-dot/SpartanBar) (W10M status bar and action center).
 - W10M-style motion: tile flips, Start "dive" transitions, Metro page turns.
 
+
+## Language
+
+Spartan Launcher can use a different language than your phone: **Settings → System → Language** (System default, English, 简体中文). The choice applies immediately and is kept across restarts.
+
+Every Settings page has a W10M-style bottom bar — tap the Windows key to leave Settings and go straight to Start.
+
 ## Install
 
 1. Go to **[Releases](https://github.com/kennethmccullers29-dot/SpartanLauncher/releases)** and download `SpartanLauncher-v1.1.apk`.
