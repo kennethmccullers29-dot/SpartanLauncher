@@ -18,11 +18,13 @@ A **Windows 10 Mobile / Windows Phone 8.1 recreation for Android**: a home scree
 
 ## Install
 
-1. Go to **[Releases](https://github.com/kennethmccullers29-dot/SpartanLauncher/releases)** and download `SpartanLauncher-v1.0.apk`.
+1. Go to **[Releases](https://github.com/kennethmccullers29-dot/SpartanLauncher/releases)** and download `SpartanLauncher-v1.1.apk`.
 2. Open it on your phone and allow installing from unknown sources if asked.
 3. Press Home and choose **Spartan Launcher**, and set it as default (Settings → Apps → Default apps → Home app).
 
 Requires Android 8.0 (API 26) or newer.
+
+**Package name:** `com.ken1dot.spartanlauncher`. v1.1 moved from `com.example.*` to this package, so it installs as a new app. Uninstall v1.0 first so you don't end up with two copies.
 
 ## Permissions and setup
 
@@ -45,6 +47,10 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
 You need JDK 17+ (Android Studio's bundled JBR works) and the Android SDK. Opening the project in Android Studio also works.
+
+## Release signing
+
+To build a signed release, create `../keys/keystore.properties` next to the repo folder. It holds `storeFile`, `storePassword`, `keyAlias` and `keyPassword`. Then run `./gradlew assembleRelease`. Without that file, release builds are unsigned.
 
 ## Credits
 
