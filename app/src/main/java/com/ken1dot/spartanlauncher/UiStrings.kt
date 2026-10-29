@@ -286,9 +286,18 @@ internal object AppLanguage {
 
     /** Wraps a base context with the chosen locale (works on API 26+). */
     fun wrap(base: Context): Context {
-        val tag = current(base).ifEmpty { return base }
+        val tag = current(base)
+        if (tag.isEmpty()) {
+            // Follow the system again: undo any process-wide default left by a previous choice,
+            // so date/time formatters and Locale.getDefault() callers stop using the old language.
+            val system = android.content.res.Resources.getSystem().configuration.locales
+            Locale.setDefault(system[0])
+            android.os.LocaleList.setDefault(system)
+            return base
+        }
         val locale = Locale.forLanguageTag(tag)
         Locale.setDefault(locale)
+        android.os.LocaleList.setDefault(android.os.LocaleList(locale))
         val config = Configuration(base.resources.configuration)
         config.setLocale(locale)
         return base.createConfigurationContext(config)
@@ -297,10 +306,13 @@ internal object AppLanguage {
     fun apply(activity: Activity, tag: String) {
         if (tag == current(activity)) return
         save(activity, tag)
-        if (tag.isEmpty()) Locale.setDefault(activity.applicationContext.resources.configuration.locales[0])
+        // Keep the first-start screen in step with the app language if setup is revisited.
+        activity.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit()
+            .putString(SETUP_LANGUAGE_KEY, tag.ifEmpty {
+                android.content.res.Resources.getSystem().configuration.locales[0].toLanguageTag() }).commit()
         activity.recreate()
     }
 }
 
-/** Lets any settings page leave settings and land on Start (W10M home button). */
+/** Leaves Settings / All apps and lands on Start (used by the system Home gesture). */
 internal object SettingsHome { var handler: (() -> Unit)? = null }

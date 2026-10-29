@@ -600,6 +600,15 @@ class MainActivity : ComponentActivity() {
         super.attachBaseContext(AppLanguage.wrap(newBase))
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        // Home gesture / button while the launcher is already in front: leave Settings
+        // or All apps and show Start.
+        if (intent.action == Intent.ACTION_MAIN && intent.hasCategory(Intent.CATEGORY_HOME)) {
+            SettingsHome.handler?.invoke()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         androidx.core.content.ContextCompat.registerReceiver(this, unlockReceiver,
@@ -646,7 +655,8 @@ class MainActivity : ComponentActivity() {
         if (!preferences.contains("setup_keep_existing_layout")) {
             preferences.edit().putBoolean("setup_keep_existing_layout", hadTileLayoutBeforeSetup).apply()
         }
-        setupLanguage = preferences.getString(SETUP_LANGUAGE_KEY, Locale.getDefault().language) ?: "en"
+        setupLanguage = AppLanguage.current(this).ifEmpty {
+            preferences.getString(SETUP_LANGUAGE_KEY, Locale.getDefault().language) ?: "en" }
         weatherOptions = readWeatherPreferences(preferences)
         accentColor = Color(preferences.getInt(ACCENT_COLOR_KEY, DefaultAccent.toArgb()))
         startStyle = preferences.getString(START_STYLE_KEY, null)
@@ -1613,9 +1623,9 @@ private fun LauncherScreen(
         searchQuery = ""
     }
     SettingsHome.handler = {
-        scope.launch { pagerState.scrollToPage(0) }
+        scope.launch { pagerState.animateScrollToPage(0) }
         searchQuery = ""
-        closeLauncherSettings()
+        if (showLauncherSettings) closeLauncherSettings()
     }
     BackHandler(enabled = showLauncherSettings) {
         // A settings sub-page goes back to the settings list first (W10M back stack).

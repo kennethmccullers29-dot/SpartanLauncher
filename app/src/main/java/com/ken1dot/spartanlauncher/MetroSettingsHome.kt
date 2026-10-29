@@ -123,7 +123,6 @@ internal fun MetroSettingsHome(
                 }
             }
         }
-        SettingsHomeBar()
     }
 }
 
@@ -178,7 +177,6 @@ internal fun MetroSettingsPage(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             content = content
         )
-        SettingsHomeBar()
     }
 }
 
@@ -205,20 +203,3 @@ private fun MetroSettingsHomePreview() {
     MetroSettingsHome("", {}, {}, Color(0xFF0078D7))
 }
 
-
-/** W10M-style bottom bar: the Windows key leaves Settings and shows Start. */
-@Composable
-internal fun SettingsHomeBar() {
-    Box(Modifier.fillMaxWidth().height(48.dp).background(Color(0xFF1F1F1F)), contentAlignment = Alignment.Center) {
-        Box(Modifier.size(width = 72.dp, height = 48.dp)
-            .semantics { contentDescription = "Start" }
-            .clickable { SettingsHome.handler?.invoke() }, contentAlignment = Alignment.Center) {
-            Canvas(Modifier.size(18.dp)) {
-                val gap = size.width * 0.08f
-                val cell = (size.width - gap) / 2
-                for (row in 0..1) for (col in 0..1) drawRect(Color.White,
-                    Offset(col * (cell + gap), row * (cell + gap)), Size(cell, cell))
-            }
-        }
-    }
-}
