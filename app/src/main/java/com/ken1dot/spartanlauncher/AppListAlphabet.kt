@@ -3,6 +3,35 @@ package com.ken1dot.spartanlauncher
 import java.text.Collator
 import java.text.Normalizer
 import java.util.Locale
+import android.icu.text.AlphabeticIndex
+import android.icu.util.ULocale
+
+private val pinyinLocale = ULocale("zh@collation=pinyin")
+
+// ICU pinyin index: buckets Han characters (Simplified and Traditional) under Latin A-Z.
+private val pinyinIndex by lazy {
+    runCatching { AlphabeticIndex<Any>(pinyinLocale).buildImmutableIndex() }.getOrNull()
+}
+
+private fun isHan(codePoint: Int): Boolean =
+    Character.UnicodeScript.of(codePoint) == Character.UnicodeScript.HAN
+
+private fun pinyinSection(text: String): String? {
+    val index = pinyinIndex ?: return null
+    val label = index.getBucket(index.getBucketIndex(text))?.label ?: return null
+    return label.uppercase(Locale.ROOT).takeIf { it.length == 1 && it[0] in 'A'..'Z' }
+}
+
+/** Sort order for All apps: pinyin-aware so Chinese labels sit under their romanized letter. */
+internal fun appListCollator(): Comparator<String> {
+    val icu = android.icu.text.Collator.getInstance(pinyinLocale)
+    val local = Collator.getInstance(Locale.getDefault())
+    return Comparator { l, r ->
+        val a = l.trim(); val b = r.trim()
+        val han = (a.isNotEmpty() && isHan(a.codePointAt(0))) || (b.isNotEmpty() && isHan(b.codePointAt(0)))
+        if (han) icu.compare(a, b) else local.compare(a, b)
+    }
+}
 
 internal fun appListSection(label: String): String {
     val trimmed = label.trim()
@@ -12,6 +41,7 @@ internal fun appListSection(label: String): String {
         .replace(Regex("\\p{M}+"), "")
         .uppercase(Locale.ROOT)
     if (folded.length == 1 && folded[0] in 'A'..'Z') return folded
+    if (isHan(trimmed.codePointAt(0))) return pinyinSection(trimmed) ?: "#"
     return if (Character.isLetter(trimmed.codePointAt(0))) first.uppercase(Locale.ROOT) else "#"
 }
 

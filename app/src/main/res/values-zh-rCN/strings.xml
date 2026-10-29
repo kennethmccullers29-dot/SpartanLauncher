@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Spartan 启动器</string>
+    <string name="notification_access_label">Spartan 启动器通知角标</string>
+</resources>

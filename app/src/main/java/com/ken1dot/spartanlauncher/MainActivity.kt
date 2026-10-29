@@ -4198,7 +4198,7 @@ private fun AllAppsScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val appGroups = remember(apps, query) {
-        val collator = java.text.Collator.getInstance(Locale.getDefault())
+        val collator = appListCollator()
         val grouped = apps.distinctBy { it.pinKey() }
             .filter { matchesAppSearch(it.label, query) }
             .sortedWith { left, right ->
