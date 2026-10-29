@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SpartanLauncher" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/SpartanWindowAnimations</item>
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+    <!-- W10M: apps materialize at the end of the Start dive instead of
+         One UI's card slide; leaving an app it fades away while Start
+         zooms back out of black. -->
+    <style name="SpartanWindowAnimations" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/w10m_app_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/w10m_app_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/w10m_home_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/w10m_app_close</item>
+        <item name="android:taskOpenEnterAnimation">@anim/w10m_app_enter</item>
+        <item name="android:taskOpenExitAnimation">@anim/w10m_app_exit</item>
+        <item name="android:taskCloseEnterAnimation">@anim/w10m_home_enter</item>
+        <item name="android:taskCloseExitAnimation">@anim/w10m_app_close</item>
+        <item name="android:taskToFrontEnterAnimation">@anim/w10m_app_enter</item>
+        <item name="android:taskToFrontExitAnimation">@anim/w10m_app_exit</item>
+        <item name="android:taskToBackEnterAnimation">@anim/w10m_home_enter</item>
+        <item name="android:taskToBackExitAnimation">@anim/w10m_app_close</item>
+        <item name="android:wallpaperOpenEnterAnimation">@anim/w10m_app_enter</item>
+        <item name="android:wallpaperOpenExitAnimation">@anim/w10m_app_exit</item>
+        <item name="android:wallpaperCloseEnterAnimation">@anim/w10m_home_enter</item>
+        <item name="android:wallpaperCloseExitAnimation">@anim/w10m_app_close</item>
+    </style>
+</resources>

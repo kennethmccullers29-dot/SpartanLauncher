@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fluent MDL2 'cell-phone' icon (Iconify fluent-mdl2 set, MIT-style Microsoft Fluent MDL2 assets). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="2048"
+    android:viewportHeight="2048">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M1536 0q27 0 50 10t40 27t28 41t10 50v1792q0 27-10 50t-27 40t-41 28t-50 10H512q-27 0-50-10t-40-27t-28-41t-10-50V128q0-27 10-50t27-40t41-28t50-10zm0 128H512v1792h1024zM896 1664h256v128H896z" />
+</vector>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Our own window while an app opens over it: hold steady. The Compose tile
+  zoom/fade is already animating the content; a window-level fade on top
+  would double up and darken too early.
+-->
+<alpha xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromAlpha="1.0"
+    android:toAlpha="1.0"
+    android:duration="300" />

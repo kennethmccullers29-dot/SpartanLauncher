@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fluent MDL2 'back' icon (Iconify fluent-mdl2 set, MIT-style Microsoft Fluent MDL2 assets). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="2048"
+    android:viewportHeight="2048">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M2048 1088H250l787 787l-90 90L6 1024L947 83l90 90l-787 787h1798z" />
+</vector>

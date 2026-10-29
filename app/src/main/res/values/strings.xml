@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Spartan Launcher</string>
+    <string name="notification_access_label">Spartan Launcher notification badges</string>
+</resources>
