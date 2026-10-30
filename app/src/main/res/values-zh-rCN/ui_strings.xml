@@ -15,11 +15,11 @@
     <string name="ui_allow_photo_access_to_show_recent_pictur">允许访问照片以显示最近的图片</string>
     <string name="ui_android_s_status_bar_stays_visible_until">SpartanBar 运行前，Android 状态栏保持可见。</string>
     <string name="ui_app_permissions">应用权限</string>
-    <string name="ui_asked_when_you_swipe_up_fingerprint_or_f">向上轻扫时询问。指纹或面部解锁显示为 Windows Hello。</string>
+    <string name="ui_asked_when_you_swipe_up_fingerprint_or_f">向上轻扫时询问。指纹或面部解锁显示为 TrueSight。</string>
     <string name="ui_available_networks_and_connections">可用网络和连接</string>
     <string name="ui_background">背景</string>
     <string name="ui_background_people_tile">背景、人脉磁贴</string>
-    <string name="ui_background_clock_glance_screen_windows_h">背景、时钟、一瞥屏幕、Windows Hello、PIN</string>
+    <string name="ui_background_clock_glance_screen_windows_h">背景、时钟、一瞥屏幕、TrueSight、PIN</string>
     <string name="ui_battery">电池</string>
     <string name="ui_battery_use_and_power_saving">电池使用情况和节电</string>
     <string name="ui_bing_daily_wallpaper">必应每日壁纸</string>
@@ -175,7 +175,7 @@
     <string name="ui_weather_calendar_live_tile">天气、日历动态磁贴</string>
     <string name="ui_wi_fi">WLAN</string>
     <string name="ui_wi_fi_airplane_mode_cellular">WLAN、飞行模式、移动网络</string>
-    <string name="ui_windows_hello">Windows Hello</string>
+    <string name="ui_windows_hello">TrueSight</string>
     <string name="ui_wireless_and_mobile_network_settings">无线和移动网络设置</string>
     <string name="ui_your_accounts">你的帐户</string>
     <string name="ui_your_accounts_email_sync">你的帐户、电子邮件、同步</string>

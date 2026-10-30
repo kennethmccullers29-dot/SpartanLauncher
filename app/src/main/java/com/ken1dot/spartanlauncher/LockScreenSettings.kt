@@ -217,13 +217,13 @@ private fun AppBarButton(glyph: String, label: String, onClick: () -> Unit) {
 }
 // LOCKWALL1
 
-private val LOCK_SETTINGS = android.net.Uri.parse("content://com.example.spartanlock.settings")
+private val LOCK_SETTINGS = android.net.Uri.parse("content://com.ken1dot.spartanlock.settings")
 private fun lockCall(context: Context, method: String, arg: String? = null, extras: android.os.Bundle? = null): android.os.Bundle? =
     runCatching { context.contentResolver.call(LOCK_SETTINGS, method, arg, extras) }.getOrNull()
 
-/** SpartanLock's own settings (theme, Glance, Windows Hello name, PIN), via SpartanLock's provider. */
+/** SpartanLock's own settings (theme, Glance, TrueSight name, PIN), via SpartanLock's provider. */
 @Composable
-internal fun SpartanLockSettings() {
+internal fun SpartanLockSettings(onOpenTrueSight: () -> Unit = {}) {
     val context = LocalContext.current
     var info by remember { mutableStateOf(lockCall(context, "get")) }
     if (info == null) {
@@ -250,13 +250,35 @@ internal fun SpartanLockSettings() {
         }
         MetroToggle(checked = data.getBoolean("glance"), onCheckedChange = { info = lockCall(context, "setGlance", it.toString()) })
     }
-    Text("Windows Hello", color = Color.White, fontFamily = MetroRegular, fontSize = 20.sp, modifier = Modifier.padding(top = 8.dp))
+    Row(Modifier.fillMaxWidth().padding(top = 8.dp).metroTilt { onOpenTrueSight() }) {
+        Column { Text("TrueSight", color = Color.White, fontFamily = MetroRegular, fontSize = 20.sp)
+            Text("Greeting name, PIN, face unlock", color = SettingsSecondary, fontFamily = MetroRegular, fontSize = 14.sp) }
+    }
+    Text("Accessibility", color = Color.White, fontFamily = MetroRegular, fontSize = 20.sp, modifier = Modifier.padding(top = 8.dp))
+    Text("SpartanLock needs its accessibility service on to show over the lock screen.", color = SettingsSecondary, fontFamily = MetroRegular, fontSize = 14.sp)
+    MetroBlockButton("Accessibility settings") {
+        runCatching { context.startActivity(android.content.Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)) }
+    }
+}
+
+/** TrueSight's own page (W10M-style settings category): greeting name and PIN. */
+@Composable
+internal fun TrueSightSettings() {
+    val context = LocalContext.current
+    var info by remember { mutableStateOf(lockCall(context, "get")) }
+    if (info == null) {
+        Text("Install or update SpartanLock to change these settings.", color = SettingsSecondary, fontFamily = MetroRegular, fontSize = 14.sp)
+        return
+    }
+    val data = info!!
+    Text("TrueSight uses your phone's fingerprint or face unlock. The face on the lock screen looks for you, smiles when it recognizes you, and you can tap it to use your PIN.", color = SettingsSecondary, fontFamily = MetroRegular, fontSize = 14.sp)
     Text("Greeting name", color = SettingsSecondary, fontFamily = MetroRegular, fontSize = 14.sp)
     var name by remember { mutableStateOf(data.getString("name").orEmpty()) }
     MetroTextBox(name, { name = it.take(40); lockCall(context, "setName", name) }, password = false)
 
     Text(if (data.getBoolean("hasPin")) "PIN" else "PIN (not set)", color = Color.White, fontFamily = MetroRegular, fontSize = 20.sp, modifier = Modifier.padding(top = 8.dp))
-    Text("Asked when you swipe up. Fingerprint or face unlock appears as Windows Hello.", color = SettingsSecondary, fontFamily = MetroRegular, fontSize = 14.sp)
+    Text("Asked when you swipe up or tap the TrueSight face.", color = SettingsSecondary, fontFamily = MetroRegular, fontSize = 14.sp)
     var old by remember { mutableStateOf("") }
     var new by remember { mutableStateOf("") }
     var msg by remember { mutableStateOf<String?>(null) }
@@ -279,12 +301,6 @@ internal fun SpartanLockSettings() {
         }
     }
     msg?.let { Text(it, color = SettingsSecondary, fontFamily = MetroRegular, fontSize = 13.sp) }
-    Text("Accessibility", color = Color.White, fontFamily = MetroRegular, fontSize = 20.sp, modifier = Modifier.padding(top = 8.dp))
-    Text("SpartanLock needs its accessibility service on to show over the lock screen.", color = SettingsSecondary, fontFamily = MetroRegular, fontSize = 14.sp)
-    MetroBlockButton("Accessibility settings") {
-        runCatching { context.startActivity(android.content.Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)
-            .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)) }
-    }
 }
 
 @Composable

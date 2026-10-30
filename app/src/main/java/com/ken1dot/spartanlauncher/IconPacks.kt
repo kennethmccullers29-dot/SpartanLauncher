@@ -1,4 +1,4 @@
-package com.ken1dot.spartanlauncher
+﻿package com.ken1dot.spartanlauncher
 
 import android.content.Context
 import android.content.Intent
@@ -47,6 +47,7 @@ internal object IconPacks {
         current = pack
         cache.clear(); missing.clear(); filterFor = ""; filter = emptyMap()
         version++
+        runCatching { context.contentResolver.notifyChange(AccentColorProvider.ICON_PACK_URI, null) }
     }
 
     fun installed(context: Context): List<IconPackInfo> {

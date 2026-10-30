@@ -46,7 +46,7 @@ internal fun CalendarTileContent(date: LocalDate, tileLabel: String, modifier: M
     val appointments by produceState(emptyList<CalendarAppointment>(), active, revision, providerRevision) {
         if (!active || !allowed) { value = emptyList(); return@produceState }
         while (true) {
-            value = try { loadUpcomingAppointments(context, limit = 6) }
+            value = try { loadUpcomingAppointments(context, limit = 20) }
                 catch (_: SecurityException) { emptyList() }
                 catch (_: IllegalArgumentException) { emptyList() }
                 catch (_: android.database.sqlite.SQLiteException) { emptyList() }
@@ -97,7 +97,7 @@ internal fun CalendarTileFace(
                 .atZone(if (e.allDay) java.time.ZoneOffset.UTC else zone).toLocalDate()
             val first = appointments.firstOrNull()
             val day = first?.let { dayOf(it) }
-            val rows = if (day == null) emptyList() else appointments.filter { dayOf(it) == day }.take(3)
+            val rows = appointments.take(3)
             val dayLabel = when (day) {
                 null -> ""
                 LocalDate.now() -> "Today"
@@ -116,7 +116,7 @@ internal fun CalendarTileFace(
                     rows.forEachIndexed { i, e ->
                         val c = if (i == 0) Color.White else Color.White.copy(alpha = .6f)
                         Row(Modifier.height(pitch)) {
-                            Text(if (e.allDay) "All day" else java.time.Instant.ofEpochMilli(e.start).atZone(zone).format(timeFmt),
+                            Text((if (dayOf(e) != day) dayOf(e).format(DateTimeFormatter.ofPattern("EEE ", locale)) else "") + (if (e.allDay) "All day" else java.time.Instant.ofEpochMilli(e.start).atZone(zone).format(timeFmt)),
                                 color = c, fontFamily = MetroRegular, fontSize = text, maxLines = 1,
                                 modifier = Modifier.width((w * 0.29f).dp))
                             Text(e.title, color = c, fontFamily = MetroRegular, fontSize = text,

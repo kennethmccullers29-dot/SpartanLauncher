@@ -15,11 +15,11 @@
     <string name="ui_allow_photo_access_to_show_recent_pictur">Allow photo access to show recent pictures</string>
     <string name="ui_android_s_status_bar_stays_visible_until">Android’s status bar stays visible until SpartanBar is running.</string>
     <string name="ui_app_permissions">App permissions</string>
-    <string name="ui_asked_when_you_swipe_up_fingerprint_or_f">Asked when you swipe up. Fingerprint or face unlock appears as Windows Hello.</string>
+    <string name="ui_asked_when_you_swipe_up_fingerprint_or_f">Asked when you swipe up. Fingerprint or face unlock appears as TrueSight.</string>
     <string name="ui_available_networks_and_connections">Available networks and connections</string>
     <string name="ui_background">Background</string>
     <string name="ui_background_people_tile">Background, People tile</string>
-    <string name="ui_background_clock_glance_screen_windows_h">Background, clock, Glance screen, Windows Hello, PIN</string>
+    <string name="ui_background_clock_glance_screen_windows_h">Background, clock, Glance screen, TrueSight, PIN</string>
     <string name="ui_battery">Battery</string>
     <string name="ui_battery_use_and_power_saving">Battery use and power saving</string>
     <string name="ui_bing_daily_wallpaper">Bing daily wallpaper</string>
@@ -175,7 +175,7 @@
     <string name="ui_weather_calendar_live_tile">Weather, calendar live tile</string>
     <string name="ui_wi_fi">Wi-Fi</string>
     <string name="ui_wi_fi_airplane_mode_cellular">Wi-Fi, airplane mode, cellular</string>
-    <string name="ui_windows_hello">Windows Hello</string>
+    <string name="ui_windows_hello">TrueSight</string>
     <string name="ui_wireless_and_mobile_network_settings">Wireless and mobile network settings</string>
     <string name="ui_your_accounts">Your accounts</string>
     <string name="ui_your_accounts_email_sync">Your accounts, email, sync</string>

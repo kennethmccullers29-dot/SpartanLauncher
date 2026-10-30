@@ -29,6 +29,11 @@ class AccentColorProvider : ContentProvider() {
                 context?.contentResolver?.let { setNotificationUri(it, LOCK_SETTINGS_URI) }
             }
         }
+        if (uri == ICON_PACK_URI) {
+            // Selected icon pack package ("" = default icons), for SpartanLock's notification icons.
+            val pack = context?.getSharedPreferences("spartan_icon_pack", 0)?.getString("pack", "").orEmpty()
+            return MatrixCursor(arrayOf("pack")).apply { addRow(arrayOf(pack)) }
+        }
         if (uri != COLOR_URI) return null
         val color = context?.getSharedPreferences("launcher", 0)
             ?.getInt("launcher_accent_color", DEFAULT_ACCENT) ?: DEFAULT_ACCENT
@@ -39,13 +44,14 @@ class AccentColorProvider : ContentProvider() {
         COLOR_URI -> "vnd.android.cursor.item/vnd.spartanlauncher.accent"
         WALLPAPER_URI -> "image/*"
         LOCK_SETTINGS_URI -> "vnd.android.cursor.item/vnd.spartanlauncher.lock-settings"
+        ICON_PACK_URI -> "vnd.android.cursor.item/vnd.spartanlauncher.icon-pack"
         else -> null
     }
 
     override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor {
         if (uri != WALLPAPER_URI || mode != "r") throw FileNotFoundException()
         val caller = context?.packageManager?.getPackagesForUid(Binder.getCallingUid()).orEmpty()
-        if ("com.example.spartanlock" !in caller) throw FileNotFoundException()
+        if ("com.ken1dot.spartanlock" !in caller) throw FileNotFoundException()
         val app = context ?: throw FileNotFoundException()
         val preferences = app.getSharedPreferences("launcher", 0)
         // Lock screen background chosen in Personalization > Lock screen.
@@ -73,6 +79,7 @@ class AccentColorProvider : ContentProvider() {
         val COLOR_URI: Uri = Uri.parse("content://com.ken1dot.spartanlauncher.accent/color")
         val WALLPAPER_URI: Uri = Uri.parse("content://com.ken1dot.spartanlauncher.accent/wallpaper")
         val LOCK_SETTINGS_URI: Uri = Uri.parse("content://com.ken1dot.spartanlauncher.accent/lock-settings")
+        val ICON_PACK_URI: Uri = Uri.parse("content://com.ken1dot.spartanlauncher.accent/icon-pack")
         private const val DEFAULT_ACCENT = 0xFF0050EF.toInt() // Cobalt.
     }
 }

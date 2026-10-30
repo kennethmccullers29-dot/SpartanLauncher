@@ -53,7 +53,7 @@ internal fun MetroSettingsHome(
 ) {
     val listState = rememberLazyListState()
     val categories = MetroSettingsCategory.entries.filter {
-        ("${it.title} ${it.subtitle}" + if (it == MetroSettingsCategory.Personalization) " background wallpaper accent color glance hello pin clock" else if (it == MetroSettingsCategory.Weather) " weather calendar" else if (it == MetroSettingsCategory.System) " spartan bar status" else "")
+        ("${it.title} ${it.subtitle}" + if (it == MetroSettingsCategory.Personalization) " background wallpaper accent color glance hello truesight pin clock" else if (it == MetroSettingsCategory.Weather) " weather calendar" else if (it == MetroSettingsCategory.System) " spartan bar status" else "")
             .contains(query.trim(), ignoreCase = true)
     }
     Column(modifier.fillMaxSize().background(SettingsBackground).imePadding()) {

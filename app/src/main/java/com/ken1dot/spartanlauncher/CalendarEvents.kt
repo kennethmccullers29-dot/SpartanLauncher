@@ -23,14 +23,14 @@ internal data class CalendarAppointment(
     val location: String
 )
 
-internal suspend fun loadUpcomingAppointments(context: Context, limit: Int = 3): List<CalendarAppointment> =
+internal suspend fun loadUpcomingAppointments(context: Context, limit: Int = 20): List<CalendarAppointment> =
     withContext(Dispatchers.IO) {
         val now = System.currentTimeMillis()
         val today = Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDate()
         val from = today.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() - 86400000L
         val uri = CalendarContract.Instances.CONTENT_URI.buildUpon()
         ContentUris.appendId(uri, from)
-        ContentUris.appendId(uri, now + 7 * 86400000L)
+        ContentUris.appendId(uri, now + 366 * 86400000L)
         val projection = arrayOf(CalendarContract.Instances.TITLE, CalendarContract.Instances.BEGIN,
             CalendarContract.Instances.END, CalendarContract.Instances.ALL_DAY,
             CalendarContract.Instances.EVENT_LOCATION)
@@ -41,13 +41,13 @@ internal suspend fun loadUpcomingAppointments(context: Context, limit: Int = 3):
                 CalendarContract.Attendees.ATTENDEE_STATUS_DECLINED.toString()),
             "${CalendarContract.Instances.BEGIN} ASC")?.use { cursor ->
             buildList {
-                while (cursor.moveToNext() && size < limit) {
+                while (cursor.moveToNext()) {
                     val event = CalendarAppointment(cursor.getString(0)?.takeIf { it.isNotBlank() } ?: "Appointment",
                         cursor.getLong(1), cursor.getLong(2), cursor.getInt(3) != 0, cursor.getString(4).orEmpty())
                     if (calendarAppointmentIsCurrent(event, now)) add(event)
                 }
             }
-        }.orEmpty()
+        }.orEmpty().sortedWith(compareBy<CalendarAppointment>({ calendarSortKey(it) }, { if (it.allDay) 0 else 1 })).take(limit)
     }
 
 internal fun calendarAppointmentIsCurrent(event: CalendarAppointment, now: Long, zone: ZoneId = ZoneId.systemDefault()): Boolean {
@@ -55,3 +55,6 @@ internal fun calendarAppointmentIsCurrent(event: CalendarAppointment, now: Long,
         .atStartOfDay(zone).toInstant().toEpochMilli() else event.end
     return ends > now
 }
+
+internal fun calendarSortKey(e: CalendarAppointment, zone: ZoneId = ZoneId.systemDefault()): Long =
+    if (e.allDay) Instant.ofEpochMilli(e.start).atZone(ZoneId.of("UTC")).toLocalDate().atStartOfDay(zone).toInstant().toEpochMilli() else e.start

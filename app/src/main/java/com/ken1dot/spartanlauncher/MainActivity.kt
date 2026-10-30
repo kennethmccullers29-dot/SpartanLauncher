@@ -3262,7 +3262,8 @@ private fun LauncherSettingsScreen(
                 SettingsAction("Start", "Background, People tile", accentColor) { open("Personalization/Start") }
                 SettingsAction("Colors", accentOptions.firstOrNull { it.second == accentColor }?.first ?: "Custom color", accentColor) { open("Personalization/Colors") }
                 SettingsAction("Sounds", "Ringtones and notification sounds", accentColor) { openAndroidSettings(Settings.ACTION_SOUND_SETTINGS) }
-                SettingsAction("Lock screen", "Background, clock, Glance screen, Windows Hello, PIN", accentColor) { open("Personalization/Lock screen") }
+                SettingsAction("Lock screen", "Background, clock, Glance screen", accentColor) { open("Personalization/Lock screen") }
+                SettingsAction("TrueSight", "Face and fingerprint unlock, greeting, PIN", accentColor) { open("Personalization/TrueSight") }
                 SettingsAction("Themes", "Start layout style, glass tiles", accentColor) { open("Personalization/Themes") }
                 SettingsAction("Icon pack", IconPacks.installed(context).firstOrNull { it.packageName == IconPacks.current }?.label ?: "Default", accentColor) { open("Personalization/Icon pack") }
             }
@@ -3427,8 +3428,9 @@ private fun LauncherSettingsScreen(
             }
             "Personalization/Lock screen" -> {
                 LockScreenSettings()
-                SpartanLockSettings()
+                SpartanLockSettings(onOpenTrueSight = { open("Personalization/TrueSight") })
             }
+            "Personalization/TrueSight" -> TrueSightSettings()
             else -> {
                 val actions = when (pageCategory) {
                     "Devices" -> listOf(
